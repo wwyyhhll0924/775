@@ -15,12 +15,12 @@ class FatTreeTopo(Topo):
         numHost = (k ** 3) // 4
 
         # Create switches
-        core_switches = [self.addSwitch(f'core-S{i+1}') for i in range(numCore)]
-        agg_switches = [self.addSwitch(f'agg-S{i+1}') for i in range(numAggregation)]
-        edge_switches = [self.addSwitch(f'acc-S{i+1}') for i in range(numEdge)]
+        core_switches = [self.addSwitch('core-S{}'.format(i+1)) for i in range(numCore)]
+        agg_switches = [self.addSwitch('agg-S{}'.format(i+1)) for i in range(numAggregation)]
+        edge_switches = [self.addSwitch('acc-S{}'.format(i+1)) for i in range(numEdge)]
 
         # Create hosts
-        hosts = [self.addHost(f'h{i+1}') for i in range(numHost)]
+        hosts = [self.addHost('h{}'.format(i+1)) for i in range(numHost)]
 
         # Link hosts to edge switches
         for i, host in enumerate(hosts):
@@ -53,7 +53,7 @@ def create_slices():
         'h3', 'h4', 'h5', 'h6', 'acc-S2', 'acc-S3', 'agg-S1', 'agg-S2', 'agg-S3', 'core-S1'
     ]
     for device in purple_flowspaces:
-        os.system(f'sudo fvctl -n add-flowspace {device}_to_purple {device} 1 any purple=1')
+        os.system('sudo fvctl -n add-flowspace {0}_to_purple {0} 1 any purple=1'.format(device))
 
     # Blue Slice
     os.system('sudo fvctl -n add-slice blue tcp:localhost:5000 admin@blue')
@@ -61,7 +61,7 @@ def create_slices():
         'h9', 'h10', 'h11', 'h12', 'acc-S5', 'acc-S6', 'agg-S5', 'agg-S6'
     ]
     for device in blue_flowspaces:
-        os.system(f'sudo fvctl -n add-flowspace {device}_to_blue {device} 1 any blue=1')
+        os.system('sudo fvctl -n add-flowspace {0}_to_blue {0} 1 any blue=1'.format(device))
 
     # Red Slice
     os.system('sudo fvctl -n add-slice red tcp:localhost:6000 admin@red')
@@ -69,7 +69,7 @@ def create_slices():
         'h12', 'h13', 'h14', 'acc-S6', 'acc-S7', 'agg-S6', 'agg-S7', 'agg-S8', 'core-S4'
     ]
     for device in red_flowspaces:
-        os.system(f'sudo fvctl -n add-flowspace {device}_to_red {device} 1 any red=1')
+        os.system('sudo fvctl -n add-flowspace {0}_to_red {0} 1 any red=1'.format(device))
 
 def create_fattree_topology():
     topo = FatTreeTopo()
