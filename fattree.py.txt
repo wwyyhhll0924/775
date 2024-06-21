@@ -1,0 +1,84 @@
+from mininet.net import Mininet
+from mininet.node import OVSSwitch
+from mininet.link import TCLink
+from mininet.cli import CLI
+from mininet.log import setLogLevel
+from mininet.topo import Topo
+import os
+
+class FatTreeTopo(Topo):
+    def build(self):
+        k = 4  # k=4 for this specific fat-tree topology
+        numCore = (k // 2) ** 2
+        numAggregation = k * k // 2
+        numEdge = k * k // 2
+        numHost = (k ** 3) // 4
+
+        # Create switches
+        core_switches = [self.addSwitch(f'core-S{i+1}') for i in range(numCore)]
+        agg_switches = [self.addSwitch(f'agg-S{i+1}') for i in range(numAggregation)]
+        edge_switches = [self.addSwitch(f'acc-S{i+1}') for i in range(numEdge)]
+
+        # Create hosts
+        hosts = [self.addHost(f'h{i+1}') for i in range(numHost)]
+
+        # Link hosts to edge switches
+        for i, host in enumerate(hosts):
+            self.addLink(host, edge_switches[i // 2], bw=12, delay='2ms')
+
+        # Link edge switches to aggregation switches
+        edge_to_agg_links = [
+            (0, 0), (1, 0), (0, 1), (1, 1),
+            (2, 2), (3, 2), (2, 3), (3, 3),
+            (4, 4), (5, 4), (4, 5), (5, 5),
+            (6, 6), (7, 6), (6, 7), (7, 7)
+        ]
+        for edge, agg in edge_to_agg_links:
+            self.addLink(edge_switches[edge], agg_switches[agg], bw=12, delay='2ms')
+
+        # Link aggregation switches to core switches
+        agg_to_core_links = [
+            (0, 0), (0, 1), (2, 0), (2, 1),
+            (4, 0), (4, 1), (6, 0), (6, 1),
+            (1, 2), (1, 3), (3, 2), (3, 3),
+            (5, 2), (5, 3), (7, 2), (7, 3)
+        ]
+        for agg, core in agg_to_core_links:
+            self.addLink(agg_switches[agg], core_switches[core], bw=12, delay='2ms')
+
+def create_slices():
+    # Purple Slice
+    os.system('sudo fvctl -n add-slice purple tcp:localhost:4000 admin@purple')
+    purple_flowspaces = [
+        'h3', 'h4', 'h5', 'h6', 'acc-S2', 'acc-S3', 'agg-S1', 'agg-S2', 'agg-S3', 'core-S1'
+    ]
+    for device in purple_flowspaces:
+        os.system(f'sudo fvctl -n add-flowspace {device}_to_purple {device} 1 any purple=1')
+
+    # Blue Slice
+    os.system('sudo fvctl -n add-slice blue tcp:localhost:5000 admin@blue')
+    blue_flowspaces = [
+        'h9', 'h10', 'h11', 'h12', 'acc-S5', 'acc-S6', 'agg-S5', 'agg-S6'
+    ]
+    for device in blue_flowspaces:
+        os.system(f'sudo fvctl -n add-flowspace {device}_to_blue {device} 1 any blue=1')
+
+    # Red Slice
+    os.system('sudo fvctl -n add-slice red tcp:localhost:6000 admin@red')
+    red_flowspaces = [
+        'h12', 'h13', 'h14', 'acc-S6', 'acc-S7', 'agg-S6', 'agg-S7', 'agg-S8', 'core-S4'
+    ]
+    for device in red_flowspaces:
+        os.system(f'sudo fvctl -n add-flowspace {device}_to_red {device} 1 any red=1')
+
+def create_fattree_topology():
+    topo = FatTreeTopo()
+    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink, controller=None)
+    net.start()
+    create_slices()  # Create the slices after the network starts
+    CLI(net)
+    net.stop()
+
+if __name__ == '__main__':
+    setLogLevel('info')
+    create_fattree_topology()
