@@ -1,10 +1,16 @@
-from mininet.net import Mininet
-from mininet.node import OVSSwitch
-from mininet.link import TCLink
-from mininet.cli import CLI
-from mininet.log import setLogLevel
-from mininet.topo import Topo
+import sys
 import os
+
+try:
+    from mininet.net import Mininet
+    from mininet.node import OVSSwitch
+    from mininet.link import TCLink
+    from mininet.cli import CLI
+    from mininet.log import setLogLevel
+    from mininet.topo import Topo
+except ImportError as e:
+    print("Error importing Mininet modules: ", e)
+    sys.exit(1)
 
 class FatTreeTopo(Topo):
     def build(self):
