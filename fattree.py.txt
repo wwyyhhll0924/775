@@ -67,7 +67,6 @@ fvctl -n add-flowspace purple_fs4 1 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.4 
 fvctl -n add-flowspace purple_fs5 1 1 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs6 1 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 
-# 聚合交换机
 fvctl -n add-flowspace purple_fs7 2 1 in_port=4,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs8 2 1 in_port=4,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs9 2 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
@@ -77,7 +76,6 @@ fvctl -n add-flowspace purple_fs12 2 1 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.4
 fvctl -n add-flowspace purple_fs13 2 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs14 2 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
 
-# 边缘交换机
 fvctl -n add-flowspace purple_fs15 3 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs16 3 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs17 3 1 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
@@ -87,7 +85,6 @@ fvctl -n add-flowspace purple_fs20 3 1 in_port=2,nw_src=10.0.0.5,nw_dst=10.0.0.4
 fvctl -n add-flowspace purple_fs21 3 1 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs22 3 1 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
 
-# 核心交换机
 fvctl -n add-flowspace purple_fs23 4 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs24 4 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs25 4 1 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
@@ -97,7 +94,6 @@ fvctl -n add-flowspace purple_fs28 4 1 in_port=3,nw_src=10.0.0.5,nw_dst=10.0.0.4
 fvctl -n add-flowspace purple_fs29 4 1 in_port=3,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs30 4 1 in_port=3,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
 
-# 聚合交换机
 fvctl -n add-flowspace purple_fs31 5 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs32 5 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs33 5 1 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
@@ -107,13 +103,16 @@ fvctl -n add-flowspace purple_fs36 5 1 in_port=3,nw_src=10.0.0.5,nw_dst=10.0.0.4
 fvctl -n add-flowspace purple_fs37 5 1 in_port=4,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs38 5 1 in_port=4,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
 
-# 边缘交换机
 fvctl -n add-flowspace purple_fs39 6 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs40 6 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs41 6 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
 fvctl -n add-flowspace purple_fs42 6 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs43 6 1 in_port=3,nw_src=10.0.0.5,nw_dst=10.0.0.6 purple=7
 fvctl -n add-flowspace purple_fs44 6 1 in_port=4,nw_src=10.0.0.6,nw_dst=10.0.0.5 purple=7
+
+
+fvctl -n add-flowspace purple_fs45 1 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs46 1 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.4 purple=7
 
 
 
