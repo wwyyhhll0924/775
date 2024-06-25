@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from mininet.net import Mininet
 from mininet.node import OVSSwitch, RemoteController
 from mininet.link import TCLink
@@ -26,48 +28,31 @@ class FatTreeTopo(Topo):
             self.addLink(host, edge_switches[i // 2], bw=12, delay='2ms')
 
         # Link edge switches to aggregation switches
-        self.addLink(edge_switches[0], agg_switches[0], bw=12, delay='2ms')
-        self.addLink(edge_switches[1], agg_switches[0], bw=12, delay='2ms')
-        self.addLink(edge_switches[0], agg_switches[1], bw=12, delay='2ms')
-        self.addLink(edge_switches[1], agg_switches[1], bw=12, delay='2ms')
-        self.addLink(edge_switches[2], agg_switches[2], bw=12, delay='2ms')
-        self.addLink(edge_switches[3], agg_switches[2], bw=12, delay='2ms')
-        self.addLink(edge_switches[2], agg_switches[3], bw=12, delay='2ms')
-        self.addLink(edge_switches[3], agg_switches[3], bw=12, delay='2ms')
-        self.addLink(edge_switches[4], agg_switches[4], bw=12, delay='2ms')
-        self.addLink(edge_switches[5], agg_switches[4], bw=12, delay='2ms')
-        self.addLink(edge_switches[4], agg_switches[5], bw=12, delay='2ms')
-        self.addLink(edge_switches[5], agg_switches[5], bw=12, delay='2ms')
-        self.addLink(edge_switches[6], agg_switches[6], bw=12, delay='2ms')
-        self.addLink(edge_switches[7], agg_switches[6], bw=12, delay='2ms')
-        self.addLink(edge_switches[6], agg_switches[7], bw=12, delay='2ms')
-        self.addLink(edge_switches[7], agg_switches[7], bw=12, delay='2ms')
+        for i in range(numEdge):
+            for j in range(numAggregation // numEdge):
+                self.addLink(edge_switches[i], agg_switches[j + (i // (numEdge // numAggregation)) * (numAggregation // numEdge)], bw=12, delay='2ms')
 
         # Link aggregation switches to core switches
-        self.addLink(agg_switches[0], core_switches[0], bw=12, delay='2ms')
-        self.addLink(agg_switches[0], core_switches[1], bw=12, delay='2ms')
-        self.addLink(agg_switches[2], core_switches[0], bw=12, delay='2ms')
-        self.addLink(agg_switches[2], core_switches[1], bw=12, delay='2ms')
-        self.addLink(agg_switches[4], core_switches[0], bw=12, delay='2ms')
-        self.addLink(agg_switches[4], core_switches[1], bw=12, delay='2ms')
-        self.addLink(agg_switches[6], core_switches[0], bw=12, delay='2ms')
-        self.addLink(agg_switches[6], core_switches[1], bw=12, delay='2ms')
-
-        self.addLink(agg_switches[1], core_switches[2], bw=12, delay='2ms')
-        self.addLink(agg_switches[1], core_switches[3], bw=12, delay='2ms')
-        self.addLink(agg_switches[3], core_switches[2], bw=12, delay='2ms')
-        self.addLink(agg_switches[3], core_switches[3], bw=12, delay='2ms')
-        self.addLink(agg_switches[5], core_switches[2], bw=12, delay='2ms')
-        self.addLink(agg_switches[5], core_switches[3], bw=12, delay='2ms')
-        self.addLink(agg_switches[7], core_switches[2], bw=12, delay='2ms')
-        self.addLink(agg_switches[7], core_switches[3], bw=12, delay='2ms')
+        for i in range(numAggregation):
+            for j in range(numCore // numAggregation):
+                self.addLink(agg_switches[i], core_switches[j + (i // (numAggregation // numCore)) * (numCore // numAggregation)], bw=12, delay='2ms')
 
 def create_fattree_topology():
     topo = FatTreeTopo()
-    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink, controller=None)
-    # 添加控制器，并确保控制器的IP和端口正确
+    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink)
+    # 
     net.addController('c0', controller=RemoteController, ip='127.0.0.1', port=6633)
     net.start()
+    
+    # 
+    print("Nodes:")
+    for node in net.values():
+        print(node)
+    
+    print("\nLinks:")
+    for link in net.links:
+        print(link)
+    
     CLI(net)
     net.stop()
 
