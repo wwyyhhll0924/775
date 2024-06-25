@@ -31,30 +31,38 @@ class FatTreeTopo(Topo):
                 host_count += 1
 
         # Link edge switches to aggregation switches
+        agg_count = 0
         for i in range(numEdge):
-            self.addLink(edge_switches[i], agg_switches[i // 2], bw=12, delay='2ms')
-            self.addLink(edge_switches[i], agg_switches[(i // 2) + (numAggregation // 2)], bw=12, delay='2ms')
+            self.addLink(edge_switches[i], agg_switches[agg_count], bw=12, delay='2ms')
+            self.addLink(edge_switches[i], agg_switches[agg_count + 1], bw=12, delay='2ms')
+            if (i + 1) % 2 == 0:
+                agg_count += 2
 
         # Link aggregation switches to core switches
+        core_count = 0
         for i in range(numAggregation):
-            for j in range(numCore):
-                self.addLink(agg_switches[i], core_switches[j], bw=12, delay='2ms')
+            self.addLink(agg_switches[i], core_switches[core_count], bw=12, delay='2ms')
+            self.addLink(agg_switches[i], core_switches[core_count + 1], bw=12, delay='2ms')
+            if (i + 1) % (numAggregation // 2) == 0:
+                core_count += 2
 
 def create_fattree_topology():
     topo = FatTreeTopo()
     net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink)
     net.addController('c0', controller=RemoteController)
     net.start()
-
+    
     # 验证网络拓扑
     print("Nodes:", net.keys())
     print("Links:")
     for link in net.links:
         print(link)
-
+    
     CLI(net)
     net.stop()
 
 if __name__ == '__main__':
     setLogLevel('info')
     create_fattree_topology()
+
+topos = {'fattreetopo': (lambda: FatTreeTopo())}
