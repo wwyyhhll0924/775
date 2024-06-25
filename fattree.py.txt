@@ -57,6 +57,29 @@ fvctl -n add-slice red tcp:127.0.0.1:6000 admin@red
 
 
 # Purple Slice
+fvctl -n remove-flowspace pfs1
+fvctl -n remove-flowspace pfs2
+fvctl -n remove-flowspace pfs3
+fvctl -n remove-flowspace pfs4
+fvctl -n remove-flowspace pfs5
+fvctl -n remove-flowspace pfs6
+fvctl -n remove-flowspace pfs7
+fvctl -n remove-flowspace pfs8
+fvctl -n remove-flowspace pfs9
+fvctl -n remove-flowspace pfs10
+fvctl -n remove-flowspace pfs11
+fvctl -n remove-flowspace pfs12
+fvctl -n remove-flowspace pfs13
+fvctl -n remove-flowspace pfs14
+fvctl -n remove-flowspace pfs15
+fvctl -n remove-flowspace pfs16
+fvctl -n remove-flowspace pfs17
+fvctl -n remove-flowspace pfs18
+fvctl -n remove-flowspace pfs19
+fvctl -n remove-flowspace pfs20
+fvctl -n remove-flowspace pfs21
+fvctl -n remove-flowspace pfs22
+
 # 核心交换机
 fvctl -n add-flowspace purple_fs1 1 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.4 purple=7
 fvctl -n add-flowspace purple_fs2 1 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.3 purple=7
@@ -84,4 +107,15 @@ fvctl -n add-flowspace purple_fs19 3 1 in_port=2,nw_src=10.0.0.5,nw_dst=10.0.0.3
 fvctl -n add-flowspace purple_fs20 3 1 in_port=2,nw_src=10.0.0.5,nw_dst=10.0.0.4 purple=7
 fvctl -n add-flowspace purple_fs21 3 1 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
 fvctl -n add-flowspace purple_fs22 3 1 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
+
+# 核心交换机与其他交换机和主机的连通性规则
+fvctl -n add-flowspace purple_fs23 4 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs24 4 1 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs25 4 1 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs26 4 1 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs27 4 1 in_port=3,nw_src=10.0.0.5,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs28 4 1 in_port=3,nw_src=10.0.0.5,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs29 4 1 in_port=3,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs30 4 1 in_port=3,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
+
 
