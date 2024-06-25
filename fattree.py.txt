@@ -47,3 +47,35 @@ def run_fat_tree():
 if __name__ == '__main__':
     setLogLevel('info')
     run_fat_tree()
+
+
+
+
+# Purple Slice
+# 核心交换机
+fvctl -n add-flowspace purple_fs1 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs2 1 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs3 1 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs4 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs5 1 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs6 1 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
+
+# 聚合交换机
+fvctl -n add-flowspace purple_fs7 2 in_port=4,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs8 2 in_port=4,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs9 2 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs10 2 in_port=4,nw_src=10.0.0.4,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs11 2 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs12 2 in_port=1,nw_src=10.0.0.5,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs13 2 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs14 2 in_port=1,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
+
+# 边缘交换机
+fvctl -n add-flowspace purple_fs15 3 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs16 3 in_port=1,nw_src=10.0.0.3,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs17 3 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.5 purple=7
+fvctl -n add-flowspace purple_fs18 3 in_port=1,nw_src=10.0.0.4,nw_dst=10.0.0.6 purple=7
+fvctl -n add-flowspace purple_fs19 3 in_port=2,nw_src=10.0.0.5,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs20 3 in_port=2,nw_src=10.0.0.5,nw_dst=10.0.0.4 purple=7
+fvctl -n add-flowspace purple_fs21 3 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.3 purple=7
+fvctl -n add-flowspace purple_fs22 3 in_port=2,nw_src=10.0.0.6,nw_dst=10.0.0.4 purple=7
