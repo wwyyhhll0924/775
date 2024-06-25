@@ -116,3 +116,76 @@ fvctl -n add-flowspace purple_fs46 1 1 in_port=3,nw_src=10.0.0.3,nw_dst=10.0.0.4
 
 
 
+
+Blue
+# 核心交换机
+fvctl -n add-flowspace blue_fs1 11 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.10 blue=7
+fvctl -n add-flowspace blue_fs2 11 1 in_port=4,nw_src=10.0.0.10,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs3 11 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs4 11 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs5 11 1 in_port=4,nw_src=10.0.0.10,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs6 11 1 in_port=4,nw_src=10.0.0.10,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs7 11 1 in_port=1,nw_src=10.0.0.11,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs8 11 1 in_port=1,nw_src=10.0.0.11,nw_dst=10.0.0.10 blue=7
+fvctl -n add-flowspace blue_fs9 11 1 in_port=1,nw_src=10.0.0.12,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs10 11 1 in_port=1,nw_src=10.0.0.12,nw_dst=10.0.0.10 blue=7
+
+# 聚合交换机
+fvctl -n add-flowspace blue_fs11 9 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs12 9 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs13 9 1 in_port=3,nw_src=10.0.0.10,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs14 9 1 in_port=3,nw_src=10.0.0.10,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs15 9 1 in_port=4,nw_src=10.0.0.11,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs16 9 1 in_port=4,nw_src=10.0.0.11,nw_dst=10.0.0.10 blue=7
+fvctl -n add-flowspace blue_fs17 9 1 in_port=4,nw_src=10.0.0.12,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs18 9 1 in_port=4,nw_src=10.0.0.12,nw_dst=10.0.0.10 blue=7
+fvctl -n add-flowspace blue_fs19 9 1 in_port=1,nw_src=10.0.0.11,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs20 9 1 in_port=1,nw_src=10.0.0.12,nw_dst=10.0.0.11 blue=7
+
+# 边缘交换机
+fvctl -n add-flowspace blue_fs21 12 1 in_port=1,nw_src=10.0.0.9,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs22 12 1 in_port=1,nw_src=10.0.0.9,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs23 12 1 in_port=1,nw_src=10.0.0.10,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs24 12 1 in_port=1,nw_src=10.0.0.10,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs25 12 1 in_port=3,nw_src=10.0.0.11,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs26 12 1 in_port=4,nw_src=10.0.0.12,nw_dst=10.0.0.11 blue=7
+fvctl -n add-flowspace blue_fs27 12 1 in_port=3,nw_src=10.0.0.11,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs28 12 1 in_port=3,nw_src=10.0.0.11,nw_dst=10.0.0.10 blue=7
+fvctl -n add-flowspace blue_fs29 12 1 in_port=4,nw_src=10.0.0.12,nw_dst=10.0.0.9 blue=7
+fvctl -n add-flowspace blue_fs30 12 1 in_port=4,nw_src=10.0.0.12,nw_dst=10.0.0.10 blue=7
+
+# 新增规则确保通信完整性
+fvctl -n add-flowspace blue_fs31 8 1 in_port=3,nw_src=10.0.0.9,nw_dst=10.0.0.12 blue=7
+fvctl -n add-flowspace blue_fs32 8 1 in_port=3,nw_src=10.0.0.10,nw_dst=10.0.0.11 blue=7
+
+
+red
+# 核心交换机
+fvctl -n add-flowspace red_fs1 4 1 in_port=3,nw_src=10.0.0.12,nw_dst=10.0.0.13 red=7
+fvctl -n add-flowspace red_fs2 4 1 in_port=3,nw_src=10.0.0.12,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs3 4 1 in_port=4,nw_src=10.0.0.13,nw_dst=10.0.0.12 red=7
+fvctl -n add-flowspace red_fs4 4 1 in_port=4,nw_src=10.0.0.14,nw_dst=10.0.0.12 red=7
+fvctl -n add-flowspace red_fs5 4 1 in_port=1,nw_src=10.0.0.13,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs6 4 1 in_port=1,nw_src=10.0.0.14,nw_dst=10.0.0.13 red=7
+
+# 聚合交换机
+fvctl -n add-flowspace red_fs7 6 1 in_port=3,nw_src=10.0.0.12,nw_dst=10.0.0.13 red=7
+fvctl -n add-flowspace red_fs8 6 1 in_port=3,nw_src=10.0.0.12,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs9 6 1 in_port=4,nw_src=10.0.0.13,nw_dst=10.0.0.12 red=7
+fvctl -n add-flowspace red_fs10 6 1 in_port=4,nw_src=10.0.0.14,nw_dst=10.0.0.12 red=7
+fvctl -n add-flowspace red_fs11 6 1 in_port=1,nw_src=10.0.0.13,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs12 6 1 in_port=1,nw_src=10.0.0.14,nw_dst=10.0.0.13 red=7
+
+# 边缘交换机
+fvctl -n add-flowspace red_fs13 13 1 in_port=3,nw_src=10.0.0.13,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs14 13 1 in_port=4,nw_src=10.0.0.14,nw_dst=10.0.0.13 red=7
+fvctl -n add-flowspace red_fs15 13 1 in_port=2,nw_src=10.0.0.12,nw_dst=10.0.0.13 red=7
+fvctl -n add-flowspace red_fs16 13 1 in_port=2,nw_src=10.0.0.12,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs17 13 1 in_port=1,nw_src=10.0.0.13,nw_dst=10.0.0.14 red=7
+fvctl -n add-flowspace red_fs18 13 1 in_port=1,nw_src=10.0.0.14,nw_dst=10.0.0.13 red=7
+
+# 新增规则确保通信完整性
+fvctl -n add-flowspace red_fs19 12 1 in_port=2,nw_src=10.0.0.12,nw_dst=10.0.0.13 red=7
+fvctl -n add-flowspace red_fs20 12 1 in_port=2,nw_src=10.0.0.12,nw_dst=10.0.0.14 red=7
+
+
