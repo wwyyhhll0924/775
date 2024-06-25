@@ -12,12 +12,12 @@ class CustomFatTreeTopo(Topo):
         num_edge_switches = k * (k // 2)
         num_hosts = k * (k // 2) * (k // 2)
 
-        core_switches = [self.addSwitch(f'core-s{i + 1}') for i in range(num_core_switches)]
-        agg_switches = [self.addSwitch(f'agg-s{i + 1}') for i in range(num_agg_switches)]
-        edge_switches = [self.addSwitch(f'edge-s{i + 1}') for i in range(num_edge_switches)]
+        core_switches = [self.addSwitch('core-s%s' % (i + 1)) for i in range(num_core_switches)]
+        agg_switches = [self.addSwitch('agg-s%s' % (i + 1)) for i in range(num_agg_switches)]
+        edge_switches = [self.addSwitch('edge-s%s' % (i + 1)) for i in range(num_edge_switches)]
 
         for i in range(num_hosts):
-            host = self.addHost(f'h{i + 1}')
+            host = self.addHost('h%s' % (i + 1))
             self.addLink(host, edge_switches[i // 2], bw=12, delay='2ms')
 
         for i in range(num_edge_switches):
