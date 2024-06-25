@@ -1,5 +1,5 @@
 from mininet.net import Mininet
-from mininet.node import OVSSwitch, RemoteController
+from mininet.node import OVSSwitch, RemoteController, Controller
 from mininet.link import TCLink
 from mininet.cli import CLI
 from mininet.log import setLogLevel
@@ -63,7 +63,8 @@ class FatTreeTopo(Topo):
 
 def create_fattree_topology():
     topo = FatTreeTopo()
-    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink, controller=RemoteController('c0', ip='127.0.0.1', port=6633))
+    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink, controller=RemoteController)
+    net.addController('c0', controller=RemoteController, ip='127.0.0.1', port=6633)
     net.start()
     CLI(net)
     net.stop()
