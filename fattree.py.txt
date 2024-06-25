@@ -1,50 +1,61 @@
-from mininet.net import Mininet
-from mininet.node import OVSSwitch
-from mininet.link import TCLink
-from mininet.cli import CLI
-from mininet.log import setLogLevel
 from mininet.topo import Topo
+from mininet.net import Mininet
+from mininet.cli import CLI
+from mininet.link import TCLink
+from mininet.log import setLogLevel
 
 class CustomFatTreeTopo(Topo):
-    def build(self, k=4):
-        numCore = (k // 2) ** 2
-        numAgg = k * (k // 2)
-        numEdge = k * (k // 2)
-        numHost = k * (k // 2) * (k // 2)
+    def __init__(self, k=4):
+        Topo.__init__(self)
+        self.k = k
+        self.numCore = (k // 2) ** 2
+        self.numAgg = k * (k // 2)
+        self.numEdge = k * (k // 2)
+        self.numHosts = (k ** 3) // 4
 
-        core_switches = [self.addSwitch('core-S%s' % (i + 1)) for i in range(numCore)]
-        agg_switches = [self.addSwitch('agg-S%s' % (i + 1)) for i in range(numAgg)]
-        edge_switches = [self.addSwitch('edge-S%s' % (i + 1)) for i in range(numEdge)]
-        hosts = [self.addHost('h%s' % (i + 1)) for i in range(numHost)]
+        self.core_switches = []
+        self.agg_switches = []
+        self.edge_switches = []
+        self.hosts = []
 
-        # Connect hosts to edge switches
-        host_count = 0
-        for edge_switch in edge_switches:
-            for _ in range(2):
-                self.addLink(hosts[host_count], edge_switch, bw=12, delay='2ms')
-                host_count += 1
+        self.create_topology()
 
-        # Connect edge switches to aggregation switches
-        agg_count = 0
-        for i in range(numEdge):
-            self.addLink(edge_switches[i], agg_switches[agg_count], bw=12, delay='2ms')
-            self.addLink(edge_switches[i], agg_switches[agg_count + 1], bw=12, delay='2ms')
-            if (i + 1) % 2 == 0:
-                agg_count += 2
+    def create_topology(self):
+        # Add Core switches
+        for i in range(self.numCore):
+            self.core_switches.append(self.addSwitch('core-S%s' % (i + 1)))
 
-        # Connect aggregation switches to core switches
-        core_count = 0
-        for i in range(numAgg):
-            self.addLink(agg_switches[i], core_switches[core_count], bw=12, delay='2ms')
-            self.addLink(agg_switches[i], core_switches[core_count + 1], bw=12, delay='2ms')
-            if (i + 1) % (numAgg // 2) == 0:
-                core_count += 2
+        # Add Aggregation switches
+        for i in range(self.numAgg):
+            self.agg_switches.append(self.addSwitch('agg-S%s' % (i + 1)))
 
-topos = {'customfattreetopo': CustomFatTreeTopo}
+        # Add Edge switches
+        for i in range(self.numEdge):
+            self.edge_switches.append(self.addSwitch('edge-S%s' % (i + 1)))
+
+        # Add Hosts and connect them to Edge switches
+        for i in range(self.numHosts):
+            host = self.addHost('h%s' % (i + 1))
+            self.hosts.append(host)
+            edge_switch = self.edge_switches[i // 2]
+            self.addLink(host, edge_switch, bw=12, delay='2ms')
+
+        # Connect Edge switches to Aggregation switches
+        for i in range(0, self.numEdge, 2):
+            for j in range(self.numAgg // self.numEdge):
+                self.addLink(self.edge_switches[i], self.agg_switches[j + (i // 2) * (self.numAgg // self.numEdge)], bw=12, delay='2ms')
+                self.addLink(self.edge_switches[i + 1], self.agg_switches[j + (i // 2) * (self.numAgg // self.numEdge)], bw=12, delay='2ms')
+
+        # Connect Aggregation switches to Core switches
+        for i in range(self.numAgg):
+            for j in range(self.numCore // self.numAgg):
+                self.addLink(self.agg_switches[i], self.core_switches[j + (i // (self.numAgg // self.numCore)) * (self.numCore // self.numAgg)], bw=12, delay='2ms')
+
+topos = {'customfattreetopo': (lambda: CustomFatTreeTopo(k=4))}
 
 def run_custom_fat_tree():
     topo = CustomFatTreeTopo(k=4)
-    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink)
+    net = Mininet(topo=topo, link=TCLink)
     net.start()
     CLI(net)
     net.stop()
