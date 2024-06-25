@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from mininet.net import Mininet
 from mininet.node import OVSSwitch, RemoteController
 from mininet.link import TCLink
