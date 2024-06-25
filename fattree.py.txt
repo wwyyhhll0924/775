@@ -26,40 +26,24 @@ class FatTreeTopo(Topo):
             self.addLink(host, edge_switches[i // 2], bw=12, delay='2ms')
 
         # Link edge switches to aggregation switches
-        # agg-S1 connects to acc-S1 and acc-S2
         self.addLink(edge_switches[0], agg_switches[0], bw=12, delay='2ms')
         self.addLink(edge_switches[1], agg_switches[0], bw=12, delay='2ms')
-
-        # agg-S2 connects to acc-S1 and acc-S2
         self.addLink(edge_switches[0], agg_switches[1], bw=12, delay='2ms')
         self.addLink(edge_switches[1], agg_switches[1], bw=12, delay='2ms')
-
-        # agg-S3 connects to acc-S3 and acc-S4
         self.addLink(edge_switches[2], agg_switches[2], bw=12, delay='2ms')
         self.addLink(edge_switches[3], agg_switches[2], bw=12, delay='2ms')
-
-        # agg-S4 connects to acc-S3 and acc-S4
         self.addLink(edge_switches[2], agg_switches[3], bw=12, delay='2ms')
         self.addLink(edge_switches[3], agg_switches[3], bw=12, delay='2ms')
-
-        # agg-S5 connects to acc-S5 and acc-S6
         self.addLink(edge_switches[4], agg_switches[4], bw=12, delay='2ms')
         self.addLink(edge_switches[5], agg_switches[4], bw=12, delay='2ms')
-
-        # agg-S6 connects to acc-S5 and acc-S6
         self.addLink(edge_switches[4], agg_switches[5], bw=12, delay='2ms')
         self.addLink(edge_switches[5], agg_switches[5], bw=12, delay='2ms')
-
-        # agg-S7 connects to acc-S7 and acc-S8
         self.addLink(edge_switches[6], agg_switches[6], bw=12, delay='2ms')
         self.addLink(edge_switches[7], agg_switches[6], bw=12, delay='2ms')
-
-        # agg-S8 connects to acc-S7 and acc-S8
         self.addLink(edge_switches[6], agg_switches[7], bw=12, delay='2ms')
         self.addLink(edge_switches[7], agg_switches[7], bw=12, delay='2ms')
 
         # Link aggregation switches to core switches
-        # core-S1 and core-S2 link to agg-S1, agg-S3, agg-S5, agg-S7
         self.addLink(agg_switches[0], core_switches[0], bw=12, delay='2ms')
         self.addLink(agg_switches[0], core_switches[1], bw=12, delay='2ms')
         self.addLink(agg_switches[2], core_switches[0], bw=12, delay='2ms')
@@ -69,7 +53,6 @@ class FatTreeTopo(Topo):
         self.addLink(agg_switches[6], core_switches[0], bw=12, delay='2ms')
         self.addLink(agg_switches[6], core_switches[1], bw=12, delay='2ms')
 
-        # core-S3 and core-S4 link to agg-S2, agg-S4, agg-S6, agg-S8
         self.addLink(agg_switches[1], core_switches[2], bw=12, delay='2ms')
         self.addLink(agg_switches[1], core_switches[3], bw=12, delay='2ms')
         self.addLink(agg_switches[3], core_switches[2], bw=12, delay='2ms')
@@ -82,7 +65,7 @@ class FatTreeTopo(Topo):
 def create_fattree_topology():
     topo = FatTreeTopo()
     net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink)
-    c0 = net.addController('c0', controller=RemoteController, ip='127.0.0.1', port=6633)
+    net.addController('c0', controller=RemoteController, ip='127.0.0.1', port=6633)
     net.start()
     CLI(net)
     net.stop()
