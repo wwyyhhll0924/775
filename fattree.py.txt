@@ -1,62 +1,49 @@
-from mininet.net import Mininet
-from mininet.node import OVSSwitch
-from mininet.link import TCLink
-from mininet.cli import CLI
-from mininet.log import setLogLevel
 from mininet.topo import Topo
+from mininet.net import Mininet
+from mininet.cli import CLI
+from mininet.link import TCLink
+from mininet.log import setLogLevel
 
 class FatTreeTopology(Topo):
-    def build(self):
-        k = 4
-        num_core = (k // 2) ** 2
-        num_agg = k * (k // 2)
-        num_edge = k * (k // 2)
-        num_hosts = (k ** 3) // 4
+    def __init__(self, k=4):
+        Topo.__init__(self)
 
-        core_switches = []
-        agg_switches = []
-        edge_switches = []
-        hosts = []
+        # Add 4 Core switches
+        core_switches = [self.addSwitch('Core-S{}'.format(i+1)) for i in range(k)]
 
-        # Add Core switches
-        for i in range(num_core):
-            core_switches.append(self.addSwitch('core-S{}'.format(i + 1)))
+        # Add 8 Aggregate switches
+        agg_switches = [self.addSwitch('Agg-S{}'.format(i+1)) for i in range(2*k)]
 
-        # Add Aggregation switches
-        for i in range(num_agg):
-            agg_switches.append(self.addSwitch('agg-S{}'.format(i + 1)))
+        # Add 8 Edge switches
+        edge_switches = [self.addSwitch('Edge-S{}'.format(i+1)) for i in range(2*k)]
 
-        # Add Edge switches
-        for i in range(num_edge):
-            edge_switches.append(self.addSwitch('edge-S{}'.format(i + 1)))
+        # Add 16 Hosts
+        num_hosts = k * 4
+        hosts = [self.addHost('h{}'.format(i+1)) for i in range(num_hosts)]
 
-        # Add Hosts and connect them to Edge switches
+        # Connect core switches to aggregate switches
+        for i in range(k):
+            self.addLink(core_switches[i], agg_switches[2*i])
+            self.addLink(core_switches[i], agg_switches[2*i+1])
+
+        # Connect aggregate switches to edge switches
+        for i in range(2*k):
+            self.addLink(agg_switches[i], edge_switches[i])
+            self.addLink(agg_switches[i], edge_switches[(i+1) % (2*k)])
+
+        # Connect edge switches to hosts
         for i in range(num_hosts):
-            host = self.addHost('h{}'.format(i + 1))
-            hosts.append(host)
-            edge_switch = edge_switches[i // 2]
-            self.addLink(host, edge_switch, bw=12, delay='2ms')
+            self.addLink(edge_switches[i//2], hosts[i])
 
-        # Connect Edge switches to Aggregation switches
-        for i in range(0, num_edge, 2):
-            for j in range(num_agg // num_edge):
-                self.addLink(edge_switches[i], agg_switches[j + (i // 2) * (num_agg // num_edge)], bw=12, delay='2ms')
-                self.addLink(edge_switches[i + 1], agg_switches[j + (i // 2) * (num_agg // num_edge)], bw=12, delay='2ms')
+topos = {'fattreetopo': FatTreeTopology}
 
-        # Connect Aggregation switches to Core switches
-        for i in range(num_agg):
-            for j in range(num_core // num_agg):
-                self.addLink(agg_switches[i], core_switches[j + (i // (num_agg // num_core)) * (num_core // num_agg)], bw=12, delay='2ms')
-
-topos = {'fattreetopo': (lambda: FatTreeTopology())}
-
-def run_fattree():
-    topo = FatTreeTopology()
-    net = Mininet(topo=topo, switch=OVSSwitch, link=TCLink)
+def run_fat_tree():
+    topo = FatTreeTopology(k=4)
+    net = Mininet(topo=topo, link=TCLink)
     net.start()
     CLI(net)
     net.stop()
 
 if __name__ == '__main__':
     setLogLevel('info')
-    run_fattree()
+    run_fat_tree()
