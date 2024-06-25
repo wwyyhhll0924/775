@@ -9,9 +9,9 @@ class FatTreeTopo(Topo):
     def build(self):
         k = 4  # k=4 for this specific fat-tree topology
         numCore = (k // 2) ** 2
-        numAggregation = k * k // 2
-        numEdge = k * k // 2
-        numHost = (k ** 3) // 4
+        numAggregation = k
+        numEdge = k
+        numHost = k * 2
 
         # Create switches
         core_switches = [self.addSwitch('core-S{}'.format(i + 1)) for i in range(numCore)]
@@ -28,12 +28,12 @@ class FatTreeTopo(Topo):
         # Link edge switches to aggregation switches
         for i in range(numEdge):
             self.addLink(edge_switches[i], agg_switches[i // 2], bw=12, delay='2ms')
-            self.addLink(edge_switches[i], agg_switches[i // 2 + 1], bw=12, delay='2ms')
+            self.addLink(edge_switches[i], agg_switches[(i // 2) + 1], bw=12, delay='2ms')
 
         # Link aggregation switches to core switches
         for i in range(numAggregation):
-            self.addLink(agg_switches[i], core_switches[i // 2], bw=12, delay='2ms')
-            self.addLink(agg_switches[i], core_switches[i // 2 + 1], bw=12, delay='2ms')
+            self.addLink(agg_switches[i], core_switches[i % numCore], bw=12, delay='2ms')
+            self.addLink(agg_switches[i], core_switches[(i + 1) % numCore], bw=12, delay='2ms')
 
 def create_fattree_topology():
     topo = FatTreeTopo()
